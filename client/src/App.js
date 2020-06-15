@@ -1,17 +1,26 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
-
+import Dashboard from "./components/dashboard/Dashboard";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Landing from "./components/Landing";
 import Register from "./components/auth/Register";
+import CreateProfile from "./components/create-profile/CreateProfile";
 import Login from "./components/auth/Login";
+import EditProfile from "./components/edit-profile/EditProfile";
+import PrivateRoute from "./components/common/PrivateRoute";
+import AddExperience from "./components/add-credentials/AddExperience";
+import AddEducation from "./components/add-credentials/AddEducation";
+import { clearCurrentProfile } from "./actions/profileActions";
+import Profiles from "./components/profiles/Profiles";
+import Profile from "./components/profile/Profile";
+import Posts from "./components/posts/Posts";
 if (localStorage.jwtToken) {
   //set auth token header auth
 
@@ -30,7 +39,8 @@ if (localStorage.jwtToken) {
   if (decoded.exp < currentTime) {
     //Logout user
     store.dispatch(logoutUser());
-    //TODO: clear current profile
+    // clear current profile
+    store.dispatch(clearCurrentProfile());
   }
 }
 function App() {
@@ -42,6 +52,42 @@ function App() {
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/profiles" component={Profiles} />
+          <Route exact path="/profile/:handle" component={Profile} />
+          <Switch>
+            <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/create-profile"
+              component={CreateProfile}
+            ></PrivateRoute>
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/edit-profile"
+              component={EditProfile}
+            ></PrivateRoute>
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/add-experience"
+              component={AddExperience}
+            ></PrivateRoute>
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/add-education"
+              component={AddEducation}
+            ></PrivateRoute>
+          </Switch>
+          <Switch>
+            <PrivateRoute exact path="/feed" component={Posts}></PrivateRoute>
+          </Switch>
           <Footer />
         </div>
       </Router>

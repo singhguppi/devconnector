@@ -320,7 +320,7 @@ router.delete(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     User.findOneAndRemove({ user: req.body.id }).then(() => {
-      User.findByIdAndRemove({ _id: req.body.id }).then(() => {
+      User.findOneAndRemove({ _id: req.body.id }).then(() => {
         res.json({ sucess: true });
       });
     });
