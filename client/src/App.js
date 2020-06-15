@@ -21,6 +21,7 @@ import { clearCurrentProfile } from "./actions/profileActions";
 import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
 import Posts from "./components/posts/Posts";
+import Post from "./components/post/Post";
 if (localStorage.jwtToken) {
   //set auth token header auth
 
@@ -87,6 +88,13 @@ function App() {
           </Switch>
           <Switch>
             <PrivateRoute exact path="/feed" component={Posts}></PrivateRoute>
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/post/:id"
+              component={Post}
+            ></PrivateRoute>
           </Switch>
           <Footer />
         </div>
